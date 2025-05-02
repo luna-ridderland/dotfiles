@@ -1,0 +1,13 @@
+width=300
+height=200
+mode=drun
+anchor=top
+location=center
+colors=colors
+filter_rate=100
+allow_markup=true
+no_actions=true
+halign=fill
+orientation=vertical
+content_halign=fill
+drun-display_generic=false
