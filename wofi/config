@@ -1,6 +1,8 @@
 width=300
 height=200
 mode=drun
+prompt=There is nothing.
+show=drun
 anchor=top
 location=center
 colors=colors
@@ -11,3 +13,6 @@ halign=fill
 orientation=vertical
 content_halign=fill
 drun-display_generic=false
+insensitive=true
+gtk_dark=true
+dynamic_lines=trued
