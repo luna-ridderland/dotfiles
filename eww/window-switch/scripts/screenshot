@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+mkdir -p /tmp/hypr-thumbs
+hyprctl clients -j | jq -c '.[]' | while read -r client; do
+    address=$(echo "$client" | jq -r '.address')
+    title=$(echo "$client" | jq -r '.title' | sed 's/[^a-zA-Z0-9]/_/g')
+    grim -g "$(echo "$client" | jq -r '.at[0], .at[1], .size[0], .size[1]' | paste -sdx -)" /tmp/hypr-thumbs/${title}_${address}.png
+done

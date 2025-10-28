@@ -1,0 +1,34 @@
+(defwindow example
+    :monitor 1
+    :geometry (geometry  :x "0px"
+                        :y "0px"
+                        :width "20%"
+                        :height "20%"
+                        :anchor "top left"
+    )
+    :stacking "overlay"
+    :exclusive true
+    :namespace "hello"
+    
+    (window-preview)
+)
+
+(defwidget window-preview []
+    (box :orientation "horizontal"
+       :spacing 10
+        (for client in window-previews
+        
+            (image :path {client.image}
+                :tooltip {client.address}
+                :image-width 250
+                :image-height 200
+            )
+        )
+    )
+)
+
+
+(defpoll window-previews :interval "1s" :type "json" :initial "[]"
+    
+  `cat /tmp/window_previews.json`
+)
