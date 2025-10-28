@@ -1,11 +1,12 @@
 function fish_greeting
-    echo Rise and shine, (set_color yellow)comrade(set_color normal). It\'s time to get to work.
+    echo (set_color yellow)"You can do this."(set_color normal)
 end
+#Rise and shine, (set_color yellow)comrade(set_color normal). It\'s time to get to work.
 
 if status is-interactive
-    set -l img (find ~/Pictures/disco -type f | shuf -n 1);
-    fastfetch -c ~/.config/fastfetch/config.jsonc --logo-type chafa --logo-padding-left 2 --logo-height 25 -l $img
+    fastfetch -c ~/.config/fastfetch/config.jsonc -l ~/.config/fastfetch/logo.txt
 end
 
 set -g fish_greeting
+#set bell-style none
 alias meow 'timeout 3s chafa -f symbols --symbols ascii -c 240 --scale max --align center ~/Downloads/hahacat.gif'
