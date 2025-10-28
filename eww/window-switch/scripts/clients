@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+workspace=$(hyprctl -j activeworkspace | jq '.id')
+clients=$(hyprctl clients -j)
+
+# Filter clients for current workspace
+filtered=$(echo "$clients" | jq --argjson ws "$workspace" \
+  '[.[] | select(.workspace.id == $ws) | {address, at, size}]')
+
+mkdir -p /tmp/previews
+rm /tmp/previews/*
+# Loop through each filtered client and take a screenshot using grim
+filtered_clients=$(echo "$filtered" | jq -c '.[]')
+
+pids=()
+while read -r client; do
+    addr=$(echo "$client" | jq -r '.address')
+    x=$(echo "$client" | jq -r '.at[0]')
+    y=$(echo "$client" | jq -r '.at[1]')
+    w=$(echo "$client" | jq -r '.size[0]')
+    h=$(echo "$client" | jq -r '.size[1]')
+    geometry="${x},${y} ${w}x${h}"
+
+    grim -l 0 -g "$geometry" "/tmp/previews/${addr}.png" &
+    pids+=($!)
+done <<< "$filtered_clients"
+for pid in "${pids[@]}"; do
+    wait "$pid"
+done
+# After all grim commands and wait
+json_output="["
+
+for file in /tmp/previews/*.png; do
+    addr=$(basename "$file" .png)
+    json_output+="{\"address\":\"$addr\", \"image\":\"$file\"},"
+done
+
+# Remove trailing comma and close array
+json_output="${json_output%,}]"
+# Output to a file Eww can read
+echo "$json_output" > /tmp/window_previews.json
+#eww update --config /home/luna/dotfiles/eww/window-switch window-previews="$(cat /tmp/window_previews.json)"

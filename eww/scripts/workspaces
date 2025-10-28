@@ -1,0 +1,11 @@
+#! /bin/bash
+
+#define icons for workspaces 1-9
+
+  for num in $(hyprctl workspaces | grep ID | sed 's/()/(1)/g' | awk 'NR>1{print $1}' RS='(' FS=')'); do 
+    widg="${widg} (box	:class \"works\"	:orientation \"h\" :spacing 5 :space-evenly \"true\" \
+                (button :onclick \"hyprctl dispatch workspace $num\" \"$num\") \
+            )"
+  done
+echo $widg
+
