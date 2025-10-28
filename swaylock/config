@@ -4,35 +4,34 @@ clock
 screenshot
 effect-blur=9x5
 effect-vignette=0.5:0.5
-color=1f1d2e80
-font="Inter"
+font=Maple Mono
 indicator
-indicator-radius=200
+indicator-radius=100
 indicator-thickness=20
 line-color=1f1d2e
-ring-color=191724
+ring-color=2b2135
 inside-color=1f1d2e
-key-hl-color=eb6f92
-separator-color=00000000
-text-color=e0def4
+key-hl-color=fc92fc
+separator-color=fc92fc
+text-color=d8cab8
 text-caps-lock-color=""
-line-ver-color=eb6f92
-ring-ver-color=eb6f92
+line-ver-color=2b2135
+ring-ver-color=2b2135
 inside-ver-color=1f1d2e
 text-ver-color=e0def4
-ring-wrong-color=31748f
-text-wrong-color=31748f
-inside-wrong-color=1f1d2e
-inside-clear-color=1f1d2e
-text-clear-color=e0def4
-ring-clear-color=9ccfd8
+ring-wrong-color=2b2135
+text-wrong-color=141216
+inside-wrong-color=fc4649
+inside-clear-color=fc92fc
+text-clear-color=141216
+ring-clear-color=2b2135
 line-clear-color=1f1d2e
-line-wrong-color=1f1d2e
-bs-hl-color=31748f
+line-wrong-color=141216
+bs-hl-color=fc92fc
 grace=2
 grace-no-mouse
 grace-no-touch
-datestr=%a, %B %e
-timestr=%I:%M %p
-fade-in=0.2
+datestr=%a, %b %e
+timestr=%H:%M
+fade-in=0.25
 ignore-empty-password
