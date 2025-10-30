@@ -1,0 +1,29 @@
+# Get previous workspace info (in JSON)
+PREV_INFO=$(hyprctl activeworkspace -j)
+PREV_ID=$(echo "$PREV_INFO" | jq -r '.id')
+PREV_MON=$(echo "$PREV_INFO" | jq -r '.monitor')
+
+# Switch
+hyprctl dispatch movetoworkspace "$1"
+
+# Get current workspace info
+CURR_INFO=$(hyprctl activeworkspace -j)
+CURR_ID=$(echo "$CURR_INFO" | jq -r '.id')
+CURR_MON=$(echo "$CURR_INFO" | jq -r '.monitor')
+
+# Print or use later
+echo "Previous workspace: $PREV_ID on $PREV_MON"
+echo "Current  workspace: $CURR_ID on $CURR_MON"
+
+#if [ "$PREV_ID" -gt "$CURR_ID" ]; then
+#    ANIM_DIR="right"
+#else
+#    ANIM_DIR="left"
+#fi
+
+swww img \
+    --transition-fps 180 \
+    --transition-duration 0.15 \
+    --outputs "$CURR_MON" \
+    --transition-bezier ".46,.52,.51,.02" \
+    ~/Pictures/wallpapers/celeste"$CURR_ID".png
