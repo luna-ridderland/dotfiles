@@ -1,0 +1,140 @@
+#!/bin/bash
+
+FORCE=false
+
+get_git() {
+    if ! command -v git &> /dev/null
+    then
+        echo "git could not be found, installing..."
+        sudo pacman -S git
+    fi
+}
+
+while getopts "f" opt; do
+    case $opt in
+        h)
+            echo "This script sets up symlinks for Hyprland configuration files."
+            echo "It will install all necessary programs but assumes Hyprland is installed."
+            echo "the same goes for drivers etc..."
+            
+            echo "Usage: setup.sh [-h -f -s -x -a]"
+            echo "  -h    Show this help message."
+            echo "  -f    Force setup even if Hyprland is not detected."
+            exit 0
+            ;;
+        f)
+            FORCE=true
+            ;;
+        \?)
+        echo "Invalid option: -$OPTARG" >&2
+        exit 1
+        ;;
+    esac
+done
+
+if [ "$FORCE" != true ]; then
+    if ! pacman -Q | grep -q 'hyprland' ; then
+        echo "This script assumes Hyprland is installed. -h for help."
+        exit 1
+   
+    fi
+fi
+CURRENT_DIR=$(pwd)
+echo "Do you want to install programs in addition to setting up symlinks? (Y/n)"
+read INSTALL_PROGRAMS
+INSTALL_PROGRAMS="${INSTALL_PROGRAMS,,}"
+
+if [ "$INSTALL_PROGRAMS" != "n" ]; then
+    echo ""
+    echo "Installing necessary programs..."
+    if pacman -Q | grep -q 'paru' ; then
+
+        PMAN="paru"
+    elif pacman -Q | grep -q 'yay' ; then
+        PMAN="yay"
+    else
+        echo "AUR helper not found. Do you want to install paru or yay? (P(aru)/y(ay)/n(o))"
+        INSTALL_PMAN="P"
+        read INSTALL_PMAN
+        INSTALL_PMAN="${INSTALL_PMAN,,}"
+        if [ "$INSTALL_PMAN" == "n" ]; then
+            echo "Won't proceed without an AUR helper. Exiting."
+            exit 1
+        elif [ "$INSTALL_PMAN" == "y" ]; then
+            get_git
+            git clone https://aur.archlinux.org/yay.git
+            cd yay || exit
+            makepkg -si
+            cd .. || exit
+            rm -rf yay
+            PMAN="yay"
+        else
+            get_git
+            git clone https://aur.archlinux.org/paru.git
+            cd paru || exit
+            makepkg -si
+            cd .. || exit
+            rm -rf paru
+            PMAN="paru"
+        fi
+    fi
+    if [ "$PMAN" == "paru" ]; then
+        echo "updating package databases..."
+        paru -Syy
+        echo "updating installed packages..."
+        paru -Syu
+        echo "installing packages..."
+        paru -S eww fastfetch fish kitty mako nautilus nvim swaylock \
+            thunar waybar wlogout wofi cava
+
+
+    elif [ "$PMAN" == "yay" ]; then
+        echo "updating package databases..."
+        yay
+        echo "installing packages..."
+        yay -S eww fastfetch fish kitty mako nautilus nvim swaylock \
+            thunar waybar wlogout wofi cava
+    else
+        echo "No AUR helper found?? Exiting."
+        exit 1
+    fi
+
+
+                
+
+
+    echo "Do you want to install extra programs? (Y/n)"
+    read EXTRAS
+    EXTRAS="${EXTRAS,,}"
+    if [ "$EXTRAS" != "n" ]; then
+        if [ "$PMAN" == "paru" ]; then
+            paru -S btop
+        elif [ "$PMAN" == "yay" ]; then
+            yay -S btop
+        else
+            echo "No AUR helper found??? This should be impossible. Exiting."
+        fi
+    fi
+fi
+
+echo "Set up symlinks? (Y/n)"
+read SETUP_SYMLINKS
+SETUP_SYMLINKS="${SETUP_SYMLINKS,,}"
+if [ "$SETUP_SYMLINKS" != "n" ]; then
+    echo "Setting up symlinks..."
+    ln -s ~/dotfiles/hypr ~/.config/hypr
+    ln -s ~/dotfiles/kitty ~/.config/kitty
+    ln -s ~/dotfiles/mako ~/.config/mako
+    ln -s ~/dotfiles/swaylock ~/.config/swaylock
+    ln -s ~/dotfiles/waybar ~/.config/waybar
+    ln -s ~/dotfiles/wlogout ~/.config/wlogout
+    ln -s ~/dotfiles/wofi ~/.config/wofi
+    ln -s ~/dotfiles/wallust ~/.config/wallust
+    ln -s ~/dotfiles/eww ~/.config/eww
+    ln -s ~/dotfiles/fastfetch ~/.config/fastfetch
+    ln -s ~/dotfiles/fish ~/.config/fish
+    ln -s ~/dotfiles/nvim ~/.config/nvim
+    ln -s ~/dotfiles/cava ~/.config/cava
+    echo "Symlinks set up."
+fi
+echo "Setup complete!"
