@@ -22,7 +22,8 @@ window#waybar {
 #tray,
 #workspaces,
 #pulseaudio,
-#custom-spotify {
+#custom-spotify,
+#custom-bg {
   background-image: linear-gradient(to bottom, #27232b 100%);
 
   margin: 6px;
@@ -37,6 +38,10 @@ window#waybar {
 
 #custom-spotify {
   margin-right: 6px;
+}
+
+#custom-bg {
+  margin-left: 6px;
 }
 
 #pulseaudio:hover {

@@ -8,6 +8,7 @@
     "margin-right": 600,
     "margin-left": 600,
     "modules-left": [
+        "custom/bg",
         "hyprland/workspaces"
     ],
     "modules-center": [
@@ -62,6 +63,11 @@
     "custom/spotify": {
         "format": "",
         "on-click": "~/.config/eww/spotify/spotify_widget.sh",
+        "tooltip": false
+    },
+    "custom/bg": {
+        "format": "",
+        "on-click": "swww img --transition-duration 0.75 ~/Pictures/wallpapers/celeste.png",
         "tooltip": false
     }
 }
