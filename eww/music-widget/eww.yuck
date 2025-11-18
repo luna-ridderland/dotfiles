@@ -1,0 +1,154 @@
+(defwindow player
+    :monitor 1
+    :stacking "fg"
+    :windowtype "normal"
+    :wm-ignore true
+    :geometry ( geometry
+        :anchor "top right"
+        :width "20%"
+        :height "17%"
+        :y "0%"
+        :x "1%"
+    )
+    (musicplayer)
+)
+(deflisten artist :initial "N/A"
+    `playerctl --follow -p spotify metadata --format '{{artist}}'`
+)
+(deflisten title :initial "N/A"
+    `playerctl --follow -p spotify metadata --format '{{title}}'`
+)
+(deflisten album :initial "N/A"
+    `playerctl --follow -p spotify metadata --format '{{album}}'`
+)
+(deflisten albumcover
+    `./scripts/albumcover.sh`
+)
+(deflisten pos :initial "N/A"
+    `playerctl --follow -p spotify metadata --format '{{duration(position)}}'`
+)
+(deflisten dur :initial "N/A"
+    `playerctl --follow -p spotify metadata --format '{{duration(mpris:length)}}'`
+)
+(deflisten playbutton :initial ":p"
+    `~/.config/eww/music-widget/scripts/playbutton.sh`)
+
+(deflisten cavabar :initial "cava no work"
+    `~/.config/eww/music-widget/scripts/cava.sh`
+)
+(defpoll song_length_s   :interval "2s"
+`playerctl -p spotify metadata mpris:length | awk '{print $1 / 1000000}' || echo 1`
+)
+(defpoll song_position_s    :interval "1s"
+`playerctl -p spotify position || echo 0`
+)
+(defwidget musicplayer []
+    (box
+        :class "music-widget"
+        :orientation "horizontal"
+        :space-evenly false
+        
+        (image
+            :hexpand false
+            :class "albumcover"
+            :image-height 150
+            :path albumcover
+            :halign "start"
+            
+        )
+        (box
+            :class "content"
+            :orientation "vertical"
+            :space-evenly false
+            :vexpand true
+            :height 160
+            :hexpand true
+            :valign "center"
+            
+            
+            
+            (label
+                :class "artist"
+                :style "font-size: 18;"
+                :text artist 
+                
+            )
+            (label 
+                    :class "album"
+                    :text album
+                    :limit-width 30
+                    :show-truncated false
+            )
+            (box
+                :style "background-color:rgba(10, 5, 30, 0.0)"
+                :orientation "horizontal"
+                :class "playback"
+                
+                (label 
+                :xalign 0.9
+                :text pos)
+                (scale
+                    :min 0 
+                    :max song_length_s 
+                    :value song_position_s 
+                    :class "prog"
+                    :onchange "playerctl position {}"
+                        
+                    )
+                (label 
+                    :xalign 0.1
+                    :text dur
+                )
+                
+            )
+            
+            (box
+                
+                :orientation "v"
+                :halign "center"
+                :spacing 10
+                :space-evenly false
+                :valign "end"
+                
+                (label :text title)
+                ;;(label :text "-" :unindent false)
+                
+            )
+            
+            ;;(box :hexpand false :vexpand true)
+            (box
+                :orientation "horizontal"
+                :class "buttons"
+                :vexpand true
+                :valign "end"
+                (button
+                    :class "prev"
+                    :width 2
+                    :height 2
+                    :onclick "playerctl previous"
+                    ""
+                )
+                (button
+                    :class "pause"
+                    :onclick "playerctl -p spotify play-pause"
+                    playbutton
+                )
+                (button
+                    :class "next"
+                    :onclick "playerctl next"
+                    ""
+                )
+                
+            )
+            ;;(label
+            ;;    :height 0
+            ;;    :class "cava"
+            ;;   :limit-width 44
+            ;;    :text cavabar
+            ;;    :valign "end"
+            ;;)
+            
+        )
+    
+    )
+)

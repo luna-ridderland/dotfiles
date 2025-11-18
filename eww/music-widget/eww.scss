@@ -1,0 +1,46 @@
+$bg-color: rgba(10, 5, 30, 0.0);
+$text-color: #e0e0e0;
+$font-family: "Maple Mono";
+$primary: #fc92fc;
+* {
+    padding: 0;
+}
+.music-widget {
+    color: $text-color;
+    border-radius: 20px;
+    background-color: $bg-color;
+    font-family: $font-family;
+    border: 0.5px solid $primary;
+    box-shadow: 0 0 12px rgba($primary, 0.1);
+    padding: 1em;
+    padding-bottom: 0;
+    
+
+}
+.albumcover {
+  padding-left: 1em;
+  padding-right: 2em;
+}
+.buttons button {
+    margin-left: 2em;
+    margin-right: 2em;
+    border-radius: 2em;
+    margin-bottom: 1em;
+}
+
+
+
+.music-widget {
+  background-size: cover;     /* fill the square */
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+
+}
+.playback {
+    color: #000000;
+
+}
+label {color: #ffffff;}
+.cava {color: #ffffff;}
+.buttons label {color: #c1c1c1;}

@@ -62,7 +62,7 @@
     },
     "custom/spotify": {
         "format": "",
-        "on-click": "~/.config/eww/spotify/spotify_widget.sh",
+        "on-click": "eww -c ~/.config/eww/music-widget/ close player || eww -c ~/.config/eww/music-widget/ open player",
         "tooltip": false
     },
     "custom/bg": {

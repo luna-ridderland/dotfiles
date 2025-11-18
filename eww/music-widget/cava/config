@@ -1,0 +1,9 @@
+[general]
+bars = 26
+
+[output]
+
+method = raw
+raw_target = /tmp/cava
+data_format = ascii
+ascii_max_range = 7
